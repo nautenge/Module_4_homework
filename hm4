@@ -1,0 +1,227 @@
+// Класс для хранения данных заказа
+public class Order
+{
+    public string ProductName { get; set; }
+    public int Quantity { get; set; }
+    public double Price { get; set; }
+
+    public Order(string productName, int quantity, double price)
+    {
+        ProductName = productName;
+        Quantity = quantity;
+        Price = price;
+    }
+}
+
+
+// Класс для расчета стоимости заказа
+public class PriceCalculator
+{
+    public double CalculateTotalPrice(Order order)
+    {
+        return order.Quantity * order.Price * 0.9;
+    }
+}
+
+
+// Класс для обработки платежей
+public class PaymentProcessor
+{
+    public void ProcessPayment(string paymentDetails)
+    {
+        Console.WriteLine("Payment processed using: " + paymentDetails);
+    }
+}
+
+
+// Класс для отправки уведомлений
+public class NotificationService
+{
+    public void SendConfirmationEmail(string email)
+    {
+        Console.WriteLine("Confirmation email sent to: " + email);
+    }
+}
+///////////////////////////////////////////
+
+public abstract class Employee
+{
+    public string Name { get; set; }
+    public double BaseSalary { get; set; }
+
+    public Employee(string name, double baseSalary)
+    {
+        Name = name;
+        BaseSalary = baseSalary;
+    }
+
+    // Абстрактный метод для расчета зарплаты
+    public abstract double CalculateSalary();
+}
+
+public class PermanentEmployee : Employee
+{
+    public PermanentEmployee(string name, double baseSalary) 
+        : base(name, baseSalary)
+    {
+    }
+
+    public override double CalculateSalary()
+    {
+        return BaseSalary * 1.2; // Permanent employee gets 20% bonus
+    }
+}
+
+public class ContractEmployee : Employee
+{
+    public ContractEmployee(string name, double baseSalary) 
+        : base(name, baseSalary)
+    {
+    }
+
+    public override double CalculateSalary()
+    {
+        return BaseSalary * 1.1; // Contract employee gets 10% bonus
+    }
+}
+
+public class InternEmployee : Employee
+{
+    public InternEmployee(string name, double baseSalary) 
+        : base(name, baseSalary)
+    {
+    }
+
+    public override double CalculateSalary()
+    {
+        return BaseSalary * 0.8; // Intern gets 80% of the base salary
+    }
+}
+
+public class FreelancerEmployee : Employee
+{
+    public FreelancerEmployee(string name, double baseSalary) 
+        : base(name, baseSalary)
+    {
+    }
+
+    public override double CalculateSalary()
+    {
+        return BaseSalary * 1.15; // Freelancer gets 15% bonus
+    }
+}
+//////////////////////////////////////////////
+
+// Определение отдельных интерфейсов
+public interface IPrint
+{
+    void Print(string content);
+}
+
+public interface IScan
+{
+    void Scan(string content);
+}
+
+public interface IFax
+{
+    void Fax(string content);
+}
+
+
+// Реализация принтера "всё в одном" (AllInOnePrinter), который поддерживает все функции
+public class AllInOnePrinter : IPrint, IScan, IFax
+{
+    public void Print(string content)
+    {
+        Console.WriteLine("Printing: " + content);
+    }
+
+    public void Scan(string content)
+    {
+        Console.WriteLine("Scanning: " + content);
+    }
+
+    public void Fax(string content)
+    {
+        Console.WriteLine("Faxing: " + content);
+    }
+}
+
+
+// Реализация базового принтера (BasicPrinter), который поддерживает только печать
+public class BasicPrinter : IPrint
+{
+    public void Print(string content)
+    {
+        Console.WriteLine("Printing: " + content);
+    }
+}
+
+
+// Реализация принтера, который поддерживает печать и сканирование, но не отправку факсов
+public class PrintScanPrinter : IPrint, IScan
+{
+    public void Print(string content)
+    {
+        Console.WriteLine("Printing: " + content);
+    }
+
+    public void Scan(string content)
+    {
+        Console.WriteLine("Scanning: " + content);
+    }
+}
+//////////////////////////////////////////////////
+
+public interface INotificationSender
+{
+    void Send(string message);
+}
+
+
+public class EmailSender : INotificationSender
+{
+    public void Send(string message)
+    {
+        Console.WriteLine("Email sent: " + message);
+    }
+}
+
+
+public class SmsSender : INotificationSender
+{
+    public void Send(string message)
+    {
+        Console.WriteLine("SMS sent: " + message);
+    }
+}
+
+
+public class MessengerSender : INotificationSender
+{
+    public void Send(string message)
+    {
+        Console.WriteLine("Message sent via Messenger: " + message);
+    }
+}
+
+
+public class NotificationService
+{
+    private readonly List<INotificationSender> _senders;
+
+    public NotificationService(List<INotificationSender> senders)
+    {
+        _senders = senders;
+    }
+
+    public void SendNotification(string message)
+    {
+        foreach (var sender in _senders)
+        {
+            sender.Send(message);
+        }
+    }
+}
+
